@@ -31,7 +31,7 @@ def home_page():
 def new_product(product: ProductsSchema, db: Session = Depends(get_db)):
     product = Products(name=product.name,
                         description=product.description,
-                        qnt_products=product.qnt_product,
+                        qnt_products=product.qnt_products,
                         price=product.price,
                         image=product.image)
     db.add(product)
