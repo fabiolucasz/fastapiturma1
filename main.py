@@ -38,3 +38,12 @@ def new_product(product: ProductsSchema, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(product)
     return product
+
+@app.get("/products")
+def get_products(db: Session = Depends(get_db)):
+    return db.query(Products).all()
+
+@app.get("/{product_id}/product")
+def get_product_by_id(product_id: int,
+                       db: Session = Depends(get_db)):
+    return db.query(Products).filter(product_id == Products.id).first()
