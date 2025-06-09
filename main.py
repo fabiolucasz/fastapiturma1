@@ -47,3 +47,24 @@ def get_products(db: Session = Depends(get_db)):
 def get_product_by_id(product_id: int,
                        db: Session = Depends(get_db)):
     return db.query(Products).filter(product_id == Products.id).first()
+
+@app.put("/update/product")
+def update_product(id: int, user: ProductsSchema,
+                   db: Session = Depends(get_db)):
+    existing_user = db.query(Products).filter(id == Products.id).first()
+    for key, value in user.dict().items():
+        setattr(existing_user, key, value)
+    db.commit()
+    db.refresh(existing_user)
+    return existing_user
+
+@app.delete("/{id}/product")
+def delete_product(id: int, db: Session = Depends(get_db)):
+    delete = db.query(Products).filter(id == Products.id).first()
+    db.delete(delete)
+    db.commit()
+    return {"message:" f"User with ID {id} was deleted succssessfully"}
+
+
+
+
